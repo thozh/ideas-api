@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  # MYSQL CONTAINER FOR API
+  api_database:
+    image: mysql:5.7
+    volumes:
+      - ./docker/volumes/mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    labels:
+      - traefik.enable=false
+    ports:
+      - 3306:3306
+    networks:
+      - web
+
+  # PMA
+  phpmyadmin:
+    image: 'phpmyadmin/phpmyadmin:latest'
+    networks:
+      - web
+    labels:
+      - traefik.backend=phpmyadmin
+      - traefik.frontend.rule=Host:pma.${DOMAIN}
+      - traefik.port=80
+    environment:
+      PMA_HOST: api_database
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./docker/pma.php.ini:/usr/local/etc/php/conf.d/phpmyadmin-misc.ini
+
+  # TRAEFIK REVERSE PROXY FOR API AND BO
+  traefik:
+    image: traefik:1.7
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker/traefik.toml:/traefik.toml:ro
+    labels:
+      - traefik.port=8080
+      - traefik.backend=traefik
+      - traefik.frontend.rule=Host:traefik.${DOMAIN}
+    command: --docker #--logLevel=DEBUG
+    networks:
+      - web
+    ports:
+      - 80:80
+      - 443:443
+
+networks:
+  web:
+    driver: bridge
