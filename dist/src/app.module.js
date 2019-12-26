@@ -8,9 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const core_1 = require("@nestjs/core");
 const idea_module_1 = require("./idea/idea.module");
 const idea_entity_1 = require("./idea/idea.entity");
 const Config_1 = require("./config/Config");
+const http_error_filter_1 = require("./shared/http-error.filter");
+const logging_interceptor_1 = require("./shared/logging.interceptor");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -28,6 +31,10 @@ AppModule = __decorate([
                 entities: [idea_entity_1.IdeaEntity],
             }),
             idea_module_1.IdeaModule,
+        ],
+        providers: [
+            { provide: core_1.APP_FILTER, useClass: http_error_filter_1.HttpErrorFilter },
+            { provide: core_1.APP_INTERCEPTOR, useClass: logging_interceptor_1.LoggingInterceptor },
         ],
     })
 ], AppModule);

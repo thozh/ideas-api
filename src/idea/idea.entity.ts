@@ -11,7 +11,7 @@ export class IdeaEntity {
 
   @CreateDateColumn() created: Date;
 
-  @Column('text') idea: string;
+  @Column('text', { nullable: true }) idea: string;
 
-  @Column('text') description: string;
+  @Column('text', { nullable: true }) description: string;
 }

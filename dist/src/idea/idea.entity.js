@@ -21,11 +21,11 @@ __decorate([
     __metadata("design:type", Date)
 ], IdeaEntity.prototype, "created", void 0);
 __decorate([
-    typeorm_1.Column('text'),
+    typeorm_1.Column('text', { nullable: true }),
     __metadata("design:type", String)
 ], IdeaEntity.prototype, "idea", void 0);
 __decorate([
-    typeorm_1.Column('text'),
+    typeorm_1.Column('text', { nullable: true }),
     __metadata("design:type", String)
 ], IdeaEntity.prototype, "description", void 0);
 IdeaEntity = __decorate([
