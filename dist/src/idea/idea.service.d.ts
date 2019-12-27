@@ -8,7 +8,5 @@ export declare class IdeaService {
     create(data: IdeaDTO): Promise<IdeaEntity>;
     read(id: string): Promise<IdeaEntity>;
     update(id: string, data: Partial<IdeaDTO>): Promise<IdeaEntity>;
-    destroy(id: string): Promise<{
-        deleted: boolean;
-    }>;
+    destroy(id: string): Promise<IdeaEntity>;
 }

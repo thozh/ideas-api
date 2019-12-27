@@ -15,20 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const idea_service_1 = require("./idea.service");
 const idea_dto_1 = require("./idea.dto");
+const validation_pipe_1 = require("../shared/validation.pipe");
 let IdeaController = class IdeaController {
     constructor(ideaService) {
         this.ideaService = ideaService;
+        this.logger = new common_1.Logger('IdeaController');
     }
     showAllIdeas() {
         return this.ideaService.showAll();
     }
     createIdea(data) {
+        this.logger.log(JSON.stringify(data));
         return this.ideaService.create(data);
     }
     readIdea(id) {
         return this.ideaService.read(id);
     }
     updateIdea(id, data) {
+        this.logger.log(JSON.stringify(data));
         return this.ideaService.update(id, data);
     }
     deleteIdea(id) {
@@ -43,6 +47,7 @@ __decorate([
 ], IdeaController.prototype, "showAllIdeas", null);
 __decorate([
     common_1.Post(),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [idea_dto_1.IdeaDTO]),
@@ -57,6 +62,7 @@ __decorate([
 ], IdeaController.prototype, "readIdea", null);
 __decorate([
     common_1.Put(':id'),
+    common_1.UsePipes(new validation_pipe_1.ValidationPipe()),
     __param(0, common_1.Param('id')), __param(1, common_1.Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),

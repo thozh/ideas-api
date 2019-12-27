@@ -11,13 +11,21 @@ const idea_controller_1 = require("./idea.controller");
 const idea_service_1 = require("./idea.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const idea_entity_1 = require("./idea.entity");
+const core_1 = require("@nestjs/core");
+const validation_pipe_1 = require("../shared/validation.pipe");
 let IdeaModule = class IdeaModule {
 };
 IdeaModule = __decorate([
     common_1.Module({
         imports: [typeorm_1.TypeOrmModule.forFeature([idea_entity_1.IdeaEntity])],
         controllers: [idea_controller_1.IdeaController],
-        providers: [idea_service_1.IdeaService],
+        providers: [
+            idea_service_1.IdeaService,
+            {
+                provide: core_1.APP_PIPE,
+                useClass: validation_pipe_1.ValidationPipe,
+            },
+        ],
     })
 ], IdeaModule);
 exports.IdeaModule = IdeaModule;

@@ -29,15 +29,28 @@ let IdeaService = class IdeaService {
         return idea;
     }
     async read(id) {
-        return await this.ideaRepository.findOne({ where: { id } });
+        const idea = await this.ideaRepository.findOne({ where: { id } });
+        if (!idea) {
+            throw new common_1.HttpException('Not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        return idea;
     }
     async update(id, data) {
+        let idea = await this.ideaRepository.findOne({ id });
+        if (!idea) {
+            throw new common_1.HttpException('Not found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.update({ id }, data);
-        return await this.ideaRepository.findOne({ id });
+        idea = await this.ideaRepository.findOne({ id });
+        return idea;
     }
     async destroy(id) {
+        const idea = await this.ideaRepository.findOne({ id });
+        if (!idea) {
+            throw new common_1.HttpException('Not found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.ideaRepository.delete({ id });
-        return { deleted: true };
+        return idea;
     }
 };
 IdeaService = __decorate([
